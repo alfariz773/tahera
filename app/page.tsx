@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Navbar from './components/Navbar';
+import CartDrawer from './components/CartDrawer';
+// We now import BOTH useCart and the CartProvider here!
+import { useCart, CartProvider } from './context/CartContext'; 
 import { restaurants } from './data/restaurants';
 import type { Restaurant } from './data/restaurants';
 
@@ -79,9 +82,20 @@ const StarIcon = ({ filled }: { filled?: boolean }) => (
   </svg>
 );
 const MapPinIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
     <circle cx="12" cy="10" r="3" />
+  </svg>
+);
+const PhoneIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.88 11.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+);
+const MailIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
+    <rect width="20" height="16" x="2" y="4" rx="2"/>
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
   </svg>
 );
 const ModalCloseIcon = () => (
@@ -90,23 +104,24 @@ const ModalCloseIcon = () => (
     <path d="m6 6 12 12" />
   </svg>
 );
-const IconBadge = ({ icon }: { icon: 'phone' | 'mail' }) => (
-  <span style={{
-    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-    width: 32, height: 32, borderRadius: '50%',
-    background: 'rgba(239,68,68,0.10)', flexShrink: 0,
-  }}>
-    {icon === 'phone' ? (
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.88 11.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-      </svg>
-    ) : (
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#ef4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect width="20" height="16" x="2" y="4" rx="2"/>
-        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-      </svg>
-    )}
-  </span>
+
+/* ── Social Icons ── */
+const InstagramIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+const FacebookIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+const TwitterIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84 0 0 0 .497-3.753C20.18 7.773 21.692 5.25 22 4.009z"></path>
+  </svg>
 );
 
 /* ── Static data ── */
@@ -123,32 +138,21 @@ const galleryImages = [
   'https://images.unsplash.com/photo-1564671165093-20688ff1fffa?auto=format&fit=crop&q=80&w=600',
 ];
 
-const offers = [
-  { title: 'Family Dinner',  sub: 'Feeds 4–5', desc: '1 Large Biryani, 2 Karahis, Mixed Grill, Drinks.',       price: 'AED 199'  },
-  { title: 'Weekend Buffet', sub: 'Sat & Sun', desc: 'Unlimited access to over 40 dishes & live stations.',      price: 'AED 89/p' },
-  { title: 'Business Lunch', sub: '12pm–4pm',  desc: 'Main course, salad, soup, and beverage.',                 price: 'AED 45'   },
-];
-
-const phoneNumbers = ['+971 50 597 2959', '+971 52 641 9506', '+971 4 352 4415'];
-const locations    = ['JVC', 'Port Saeed', 'Arjan', 'Meena Bazaar', 'Bur Dubai', 'T Grills JVC', 'T Grill Marjan', 'Production City'];
-const weekdays     = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Saturday', 'Sunday'];
-
 /* ══════════════════════════════════════════
-   MAIN COMPONENT
+   HOME CONTENT COMPONENT
 ══════════════════════════════════════════ */
-export default function Home() {
-  const [showAll, setShowAll] = useState(false);
+function HomeContent() {
   const [selectedBranch, setSelectedBranch] = useState<Restaurant | null>(null);
   const [reviewForm, setReviewForm] = useState(false);
+
+  // We are now safely inside the CartProvider!
+  const { addToCart } = useCart(); 
 
   // Lock body scroll when the main page modal is open
   useEffect(() => {
     document.body.style.overflow = selectedBranch ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [selectedBranch]);
-
-  // Show 6 working branches initially, show all 8 if "View All" is clicked
-  const displayedRestaurants = showAll ? restaurants : restaurants.slice(0, 6);
 
   return (
     <div className="min-h-screen font-sans text-gray-900 overflow-x-hidden" style={{ background: '#fff' }}>
@@ -178,25 +182,27 @@ export default function Home() {
 
       <div className="bg-fixed-layer" aria-hidden="true" />
 
+      {/* ── Render Navbar and CartDrawer ── */}
       <Navbar />
+      <CartDrawer />
 
       <div className="page-content">
 
         {/* ── HERO ── */}
         <section id="home" className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden">
           <div className="container mx-auto px-6 md:px-12 max-w-[1100px]">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center text-center lg:text-left">
               <FadeLeft>
                 <h2 className="text-xl md:text-2xl font-medium text-gray-700 mb-3 tracking-tight">Welcome to Tahera Restaurant</h2>
-                <h1 className="text-[50px] md:text-[68px] lg:text-[76px] font-bold text-[#111827] leading-[1.05] mb-7">
+                <h1 className="text-[44px] md:text-[68px] lg:text-[76px] font-bold text-[#111827] leading-[1.05] mb-7 mx-auto lg:mx-0 max-w-lg">
                   Authentic<br />Flavours<br />of Dubai
                 </h1>
-                <p className="text-lg text-gray-500 leading-relaxed font-light max-w-md">
+                <p className="text-base md:text-lg text-gray-500 leading-relaxed font-light max-w-md mx-auto lg:mx-0">
                   From hearty breakfasts to satisfying lunches and dinner favourites, our menu offers comfort food with vibrant flavours that keep guests coming back.
                 </p>
               </FadeLeft>
-              <FadeRight className="flex justify-center lg:justify-end items-center h-[360px] md:h-[450px] mt-6 lg:mt-0">
-                <div className="relative w-[300px] h-[300px] md:w-[420px] md:h-[420px] float-anim">
+              <FadeRight className="flex justify-center lg:justify-end items-center h-[300px] md:h-[450px] mt-2 lg:mt-0">
+                <div className="relative w-[280px] h-[280px] md:w-[420px] md:h-[420px] float-anim">
                   <Image src="/transparent-dish.png" alt="Tahera Signature Dish" fill className="object-contain drop-shadow-[0_18px_28px_rgba(239,68,68,0.16)]" priority />
                 </div>
               </FadeRight>
@@ -204,38 +210,22 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── BRANCHES BUTTON ── */}
-        <section className="py-10">
-          <div className="container mx-auto px-6 text-center">
-            <FadeUp>
-              <button
-                onClick={() => setShowAll((v) => !v)}
-                className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white px-10 py-4 rounded-lg font-semibold text-base transition-all shadow-lg hover:-translate-y-0.5 active:scale-95"
-              >
-                {showAll ? 'Show Less' : 'View All 8 Branches'}
-              </button>
-            </FadeUp>
-          </div>
-        </section>
-
         {/* ── BRANCHES GRID ── */}
-        <section id="restaurants" className="pb-16 pt-6">
+        <section id="restaurants" className="pb-16 pt-16">
           <div className="container mx-auto px-6 md:px-12 max-w-[1200px]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {displayedRestaurants.map((b, idx) => (
-                <FadeUp key={b.id} delay={idx * 90}>
+            <FadeUp className="text-center max-w-2xl mx-auto mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Our Locations</h2>
+              <p className="text-gray-500 mt-3">Find a Tahera Restaurant near you.</p>
+            </FadeUp>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
+              {restaurants.map((b, idx) => (
+                <FadeUp key={b.id} delay={idx * 50}>
                   <div
                     onClick={() => { setSelectedBranch(b); setReviewForm(false); }}
                     className="group cursor-pointer bg-white/65 backdrop-blur-sm rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-red-100/50 flex flex-col hover:-translate-y-1 transition-all duration-300 h-full relative"
                   >
                     <div className="relative h-48 w-full overflow-hidden">
-                      <Image
-                        src={b.cover}
-                        alt={b.name}
-                        fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
-                      {/* elegant badge for Coming Soon in the grid */}
+                      <Image src={b.cover} alt={b.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
                       {b.openingSoon && (
                         <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center transition-opacity duration-300 group-hover:bg-black/50">
                           <span className="bg-red-500 text-white text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-md shadow-md transform -rotate-2">
@@ -245,9 +235,7 @@ export default function Home() {
                       )}
                     </div>
                     <div className="p-5 flex-1 flex flex-col text-center border-t border-red-50">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1.5 group-hover:text-red-500 transition-colors">
-                        {b.name}
-                      </h3>
+                      <h3 className="text-lg font-bold text-gray-900 mb-1.5 group-hover:text-red-500 transition-colors">{b.name}</h3>
                       <p className="text-gray-500 text-sm line-clamp-2">{b.description}</p>
                     </div>
                   </div>
@@ -275,7 +263,10 @@ export default function Home() {
                     <div className="p-5 flex-1 flex flex-col">
                       <h3 className="text-lg font-bold text-gray-900 mb-2">{d.name}</h3>
                       <p className="text-gray-500 text-sm leading-relaxed flex-1 mb-5">{d.desc}</p>
-                      <button className="w-full py-2.5 text-sm font-bold text-red-500 bg-red-50/60 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors duration-300">
+                      <button 
+                        onClick={() => addToCart(d.name, d.price)}
+                        className="w-full py-2.5 text-sm font-bold text-red-500 bg-red-50/60 rounded-lg group-hover:bg-red-500 group-hover:text-white transition-colors duration-300"
+                      >
                         Add to Order
                       </button>
                     </div>
@@ -306,38 +297,13 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── OFFERS ── */}
-        <section id="offers" className="py-20">
-          <div className="container mx-auto px-6 md:px-12 max-w-[1200px]">
-            <FadeUp className="text-center max-w-2xl mx-auto mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Exclusive Offers</h2>
-              <p className="text-gray-500">Enjoy premium dining at unbeatable values.</p>
-            </FadeUp>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {offers.map((o, i) => (
-                <FadeUp key={i} delay={i * 120}>
-                  <div className="bg-white/65 backdrop-blur-md border border-red-100/50 rounded-2xl p-6 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all flex flex-col h-full">
-                    <span className="px-3 py-1 bg-red-100 text-red-600 w-max rounded-full text-[11px] font-bold uppercase mb-4">{o.sub}</span>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">{o.title}</h3>
-                    <p className="text-gray-500 text-sm leading-relaxed flex-1 mb-5">{o.desc}</p>
-                    <div className="flex justify-between items-center border-t border-red-100/50 pt-4">
-                      <span className="text-xl font-extrabold text-red-500">{o.price}</span>
-                      <button className="text-xs font-bold text-red-500 hover:text-red-700 transition-colors uppercase tracking-wide">Claim</button>
-                    </div>
-                  </div>
-                </FadeUp>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* ── ABOUT ── */}
         <section id="about" className="py-20">
           <div className="container mx-auto px-6 md:px-12 max-w-[1200px]">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center text-center lg:text-left">
               <FadeLeft className="space-y-4">
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight">Crafted with passion, served with pride.</h2>
-                <p className="text-gray-600 leading-relaxed font-light">
+                <p className="text-gray-600 leading-relaxed font-light mx-auto lg:mx-0 max-w-lg">
                   Founded in the vibrant streets of Dubai, Tahera brings the rich, aromatic heritage of Pakistan and the Middle East to your table. We believe that food is an experience that brings families and friends together.
                 </p>
               </FadeLeft>
@@ -349,56 +315,70 @@ export default function Home() {
         </section>
 
         {/* ── FOOTER ── */}
-        <footer id="contact" className="border-t border-red-200/50 py-16 mt-8">
-          <div className="container mx-auto px-6 md:px-12 max-w-[1400px]">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+       {/* ── ULTRA-SLEEK HORIZONTAL FOOTER ── */}
+        <footer id="contact" className="bg-gray-50 border-t border-gray-200 py-8 mt-12">
+          <div className="container mx-auto px-6 max-w-[1200px]">
+            
+            {/* Main Row: Stacks on mobile, inline row on desktop */}
+            <div className="flex flex-col lg:flex-row justify-between items-center gap-6 lg:gap-8">
+              
+              {/* Brand */}
+              <div className="flex items-center gap-3 shrink-0">
+                <Image src="/logo.jpeg" alt="Tahera Logo" width={40} height={40} className="rounded-full shadow-sm object-contain" />
+                <span className="font-bold text-base tracking-widest text-gray-900 uppercase">Tahera</span>
+              </div>
 
-              <FadeUp delay={0}>
-                <div className="flex flex-col items-start mb-5">
-                  <Image src="/logo.jpeg" alt="Tahera Logo" width={48} height={48} className="rounded-full shadow-sm object-contain" />
-                  <span className="font-bold text-[10px] tracking-widest text-gray-900 uppercase mt-2">Tahera</span>
-                  <span className="text-[10px] tracking-widest text-gray-400 uppercase">Restaurant</span>
+              {/* Contact & Socials Row */}
+              <div className="flex flex-col md:flex-row items-center gap-6 lg:gap-10">
+                
+                {/* Phone Numbers (Side-by-side on tablet/desktop, stacked on tiny phones) */}
+                <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-sm text-gray-600 font-medium">
+                  <a href="tel:+971505972959" className="hover:text-red-500 transition-colors">+971 50 597 2959</a>
+                  <span className="hidden sm:inline text-gray-300">|</span>
+                  <a href="tel:+971526419506" className="hover:text-red-500 transition-colors">+971 52 641 9506</a>
                 </div>
-                <h4 className="text-gray-900 font-bold mb-3 text-sm uppercase tracking-wider">Our Locations</h4>
-                <ul className="space-y-2 text-sm text-gray-500">
-                  {locations.map((l) => <li key={l}>{l}</li>)}
-                </ul>
-              </FadeUp>
 
-              <FadeUp delay={100}>
-                <h4 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider">Phone</h4>
-                <ul className="space-y-3 mb-7">
-                  {phoneNumbers.map((n) => (
-                    <li key={n} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <IconBadge icon="phone" />
-                      <span className="text-sm text-gray-500">{n}</span>
-                    </li>
-                  ))}
-                </ul>
-                <h4 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider">Email</h4>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <IconBadge icon="mail" />
-                  <span className="text-sm text-gray-500">salmanntechs@gmail.com</span>
+                {/* Email */}
+                <div className="flex items-center">
+                  <a href="mailto:tahera@gmail.com" className="text-sm text-gray-600 hover:text-red-500 transition-colors font-medium">
+                    tahera@gmail.com
+                  </a>
                 </div>
-              </FadeUp>
 
-              <FadeUp delay={200}>
-                <h4 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider">Quick Links</h4>
-                <ul className="space-y-3 text-sm text-gray-500">
-                  <li><a href="#about"   className="hover:text-red-500 transition-colors">About Us</a></li>
-                  <li><a href="#contact" className="hover:text-red-500 transition-colors">Contact Us</a></li>
-                  <li><a href="#home"    className="hover:text-red-500 transition-colors">Home</a></li>
-                </ul>
-              </FadeUp>
+                {/* Social Media Icons */}
+                <div className="flex items-center gap-5">
+                  {/* Instagram */}
+                  <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-red-500 transition-transform hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                  </a>
+                  {/* TikTok */}
+                  <a href="#" aria-label="TikTok" className="text-gray-400 hover:text-red-500 transition-transform hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                      <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93v7.2c0 1.61-.6 3.19-1.74 4.3-1.14 1.12-2.73 1.75-4.34 1.75-1.58.01-3.15-.57-4.3-1.64-1.14-1.06-1.84-2.58-1.93-4.17-.09-1.57.48-3.15 1.56-4.25 1.07-1.1 2.58-1.76 4.16-1.84v4.03c-.44.05-.88.2-1.25.46-.37.25-.66.6-.82 1.01-.15.4-.2.85-.12 1.28.08.43.32.81.65 1.08.34.27.76.4 1.19.38.43-.02.83-.2 1.15-.49.32-.29.54-.68.64-1.11.1-.43.08-.88-.06-1.29l-.02-12.83z"/>
+                    </svg>
+                  </a>
+                  {/* Facebook */}
+                  <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-red-500 transition-transform hover:scale-110">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+                      <path d="M14 13.5h2.5l1-4H14v-2c0-1.03 0-2 2-2h1.5V2.14c-.326-.043-1.557-.14-2.857-.14C11.928 2 10 3.657 10 6.7v2.8H7v4h3V22h4v-8.5z"/>
+                    </svg>
+                  </a>
+                </div>
 
-              <FadeUp delay={300}>
-                <h4 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider">Opening Hours</h4>
-                <ul className="space-y-2 text-sm text-gray-500">
-                  {weekdays.map((d) => <li key={d}>{d} — Open 24 hours</li>)}
-                  <li className="text-red-500 font-semibold">Friday — Open 24 hours</li>
-                </ul>
-              </FadeUp>
+              </div>
+            </div>
 
+            {/* Bottom Copyright Bar */}
+            <div className="border-t border-gray-200 mt-6 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
+              <p className="text-center md:text-left">&copy; {new Date().getFullYear()} Tahera Restaurant. All rights reserved.</p>
+              <div className="flex gap-4">
+                <a href="#" className="hover:text-gray-600 transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-gray-600 transition-colors">Terms of Service</a>
+              </div>
             </div>
           </div>
         </footer>
@@ -417,7 +397,7 @@ export default function Home() {
               <ModalCloseIcon />
             </button>
 
-            <div className="relative h-60 shrink-0">
+            <div className="relative h-48 md:h-60 shrink-0">
               <Image src={selectedBranch.cover} alt={selectedBranch.name} fill className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
               <div className="absolute bottom-5 left-6 right-6 flex flex-col items-start gap-2">
@@ -426,38 +406,44 @@ export default function Home() {
                     Opening Soon
                   </span>
                 )}
-                <h2 className="text-2xl md:text-3xl font-bold text-white">{selectedBranch.name}</h2>
-                <p className="text-red-200 flex items-center gap-1.5 mt-1 text-sm font-medium">
+                <h2 className="text-xl md:text-3xl font-bold text-white">{selectedBranch.name}</h2>
+                <p className="text-red-200 flex items-center gap-1.5 mt-1 text-xs md:text-sm font-medium">
                   <MapPinIcon />{selectedBranch.location}
                 </p>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 md:p-9 modal-sb bg-white">
-              <p className="text-base text-gray-700 leading-relaxed mb-8 border-b border-red-100 pb-5">
+            <div className="flex-1 overflow-y-auto p-5 md:p-9 modal-sb bg-white">
+              <p className="text-sm md:text-base text-gray-700 leading-relaxed mb-6 border-b border-red-100 pb-5">
                 {selectedBranch.description}
               </p>
 
               {selectedBranch.openingSoon ? (
-                // COMING SOON LAYOUT
-                <div className="flex flex-col items-center justify-center py-12 bg-red-50/50 border border-red-100 rounded-xl text-center">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Ready!</h3>
-                  <p className="text-gray-500 text-lg max-w-md">We are preparing something special for you. Stay tuned for our full menu and grand opening dates.</p>
+                <div className="flex flex-col items-center justify-center py-10 md:py-12 bg-red-50/50 border border-red-100 rounded-xl text-center">
+                  <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">Get Ready!</h3>
+                  <p className="text-gray-500 text-sm md:text-lg max-w-md">We are preparing something special for you. Stay tuned for our full menu and grand opening dates.</p>
                 </div>
               ) : (
-                // STANDARD MENU/REVIEW LAYOUT
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
                   {/* Specialties */}
                   <div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-5">Specialties</h3>
+                    <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4 md:mb-5">Specialties</h3>
                     <div className="space-y-3">
                       {selectedBranch.menu.map((d, i) => (
                         <div
                           key={i}
-                          className="flex justify-between items-center p-4 rounded-xl border border-red-100 bg-red-50/25 hover:border-red-300 transition-colors"
+                          className="flex justify-between items-center p-3 md:p-4 rounded-xl border border-red-100 bg-red-50/25 hover:border-red-300 transition-colors"
                         >
-                          <span className="font-semibold text-gray-800 text-sm">{d.name}</span>
-                          <span className="text-red-500 font-bold text-sm">{d.price}</span>
+                          <span className="font-semibold text-gray-800 text-xs md:text-sm">{d.name}</span>
+                          <div className="flex items-center gap-3">
+                            <span className="text-red-500 font-bold text-xs md:text-sm">{d.price}</span>
+                            <button
+                              onClick={() => addToCart(d.name, d.price)}
+                              className="bg-red-500 text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-red-600 transition-colors text-lg pb-0.5 shadow-sm"
+                            >
+                              +
+                            </button>
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -465,53 +451,36 @@ export default function Home() {
 
                   {/* Reviews */}
                   <div>
-                    <div className="flex justify-between items-center mb-5">
-                      <h3 className="text-xl font-bold text-gray-900">Guest Reviews</h3>
+                    <div className="flex justify-between items-center mb-4 md:mb-5">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900">Guest Reviews</h3>
                       <button
                         onClick={() => setReviewForm((r) => !r)}
-                        className="text-sm font-bold text-red-500 hover:text-red-600 underline underline-offset-4"
+                        className="text-xs md:text-sm font-bold text-red-500 hover:text-red-600 underline underline-offset-4"
                       >
                         {reviewForm ? 'Cancel' : 'Add Review'}
                       </button>
                     </div>
 
                     {reviewForm ? (
-                      <div className="bg-red-50/40 p-5 rounded-xl border border-red-100 space-y-3">
-                        <input
-                          type="text"
-                          placeholder="Your Name"
-                          className="w-full p-3 rounded-lg border border-red-200 text-sm focus:outline-none focus:ring-1 focus:ring-red-400"
-                        />
+                      <div className="bg-red-50/40 p-4 md:p-5 rounded-xl border border-red-100 space-y-3">
+                        <input type="text" placeholder="Your Name" className="w-full p-2.5 md:p-3 rounded-lg border border-red-200 text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-red-400" />
                         <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((i) => (
-                            <StarIcon key={i} filled={i <= 4} />
-                          ))}
+                          {[1, 2, 3, 4, 5].map((i) => <StarIcon key={i} filled={i <= 4} />)}
                         </div>
-                        <textarea
-                          rows={3}
-                          placeholder="Write a review..."
-                          className="w-full p-3 rounded-lg border border-red-200 text-sm focus:outline-none focus:ring-1 focus:ring-red-400"
-                        />
-                        <button
-                          onClick={() => { alert('Review submitted!'); setReviewForm(false); }}
-                          className="w-full bg-red-500 text-white font-bold py-3 rounded-lg hover:bg-red-600 transition-colors text-sm"
-                        >
-                          Submit
-                        </button>
+                        <textarea rows={3} placeholder="Write a review..." className="w-full p-2.5 md:p-3 rounded-lg border border-red-200 text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-red-400" />
+                        <button onClick={() => { alert('Review submitted!'); setReviewForm(false); }} className="w-full bg-red-500 text-white font-bold py-2.5 md:py-3 rounded-lg hover:bg-red-600 transition-colors text-xs md:text-sm">Submit</button>
                       </div>
                     ) : (
                       <div className="space-y-4">
                         {selectedBranch.reviews.map((r, i) => (
                           <div key={i} className="p-4 rounded-xl border border-red-100 bg-white shadow-sm">
                             <div className="flex justify-between items-center mb-2">
-                              <span className="font-bold text-gray-900 text-sm">{r.author}</span>
+                              <span className="font-bold text-gray-900 text-xs md:text-sm">{r.author}</span>
                               <div className="flex gap-0.5">
-                                {[...Array(5)].map((_, j) => (
-                                  <StarIcon key={j} filled={j < r.rating} />
-                                ))}
+                                {[...Array(5)].map((_, j) => <StarIcon key={j} filled={j < r.rating} />)}
                               </div>
                             </div>
-                            <p className="text-gray-500 text-sm italic">"{r.text}"</p>
+                            <p className="text-gray-500 text-xs md:text-sm italic">"{r.text}"</p>
                           </div>
                         ))}
                       </div>
@@ -525,5 +494,16 @@ export default function Home() {
       )}
 
     </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   ROOT EXPORT WITH CART PROVIDER
+══════════════════════════════════════════ */
+export default function Home() {
+  return (
+    <CartProvider>
+      <HomeContent />
+    </CartProvider>
   );
 }

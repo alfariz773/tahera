@@ -22,7 +22,7 @@ const NAV_LINKS = [
   { id: 'home',    label: 'Home' },
   { id: 'menu',    label: 'Menu' },
   { id: 'gallery', label: 'Gallery' },
-  { id: 'offers',  label: 'Offers' },
+  // { id: 'offers',  label: 'Offers' },
   { id: 'about',   label: 'About Us' },
   { id: 'contact', label: 'Contact Us' },
 ];

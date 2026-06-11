@@ -142,7 +142,7 @@ export const restaurants: Restaurant[] = [
   },
   {
     id: 'tgrills-marjan',
-    name: 'T Grill Restaurant Marjan',
+    name: 'T Grill Restaurant Majan',
     location: 'Al Marjan Island, Ras Al Khaimah',
     address: 'Al Marjan Island Boulevard, Ras Al Khaimah',
     mapUrl: 'https://maps.google.com/maps?q=Al+Marjan+Island,+Ras+Al+Khaimah&output=embed',
