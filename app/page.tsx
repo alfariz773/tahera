@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // <-- IMPORTED NEXT.JS LINK
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
-// We now import BOTH useCart and the CartProvider here!
 import { useCart, CartProvider } from './context/CartContext'; 
 import { restaurants } from './data/restaurants';
 import type { Restaurant } from './data/restaurants';
@@ -87,10 +87,40 @@ const MapPinIcon = () => (
     <circle cx="12" cy="10" r="3" />
   </svg>
 );
+const PhoneIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
+    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.88 11.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+  </svg>
+);
+const MailIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
+    <rect width="20" height="16" x="2" y="4" rx="2"/>
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+  </svg>
+);
 const ModalCloseIcon = () => (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M18 6 6 18" />
     <path d="m6 6 12 12" />
+  </svg>
+);
+
+/* ── Social Icons ── */
+const InstagramIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+  </svg>
+);
+const FacebookIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+  </svg>
+);
+const TwitterIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84 0 0 0 .497-3.753C20.18 7.773 21.692 5.25 22 4.009z"></path>
   </svg>
 );
 
@@ -107,6 +137,7 @@ const galleryImages = [
   'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=600',
   'https://images.unsplash.com/photo-1564671165093-20688ff1fffa?auto=format&fit=crop&q=80&w=600',
 ];
+
 /* ══════════════════════════════════════════
    HOME CONTENT COMPONENT
 ══════════════════════════════════════════ */
@@ -117,7 +148,6 @@ function HomeContent() {
   // State to track which restaurant's menu is showing in the homepage section
   const [activeMenuId, setActiveMenuId] = useState<string>(restaurants[0].id);
 
-  // We are now safely inside the CartProvider!
   const { addToCart } = useCart(); 
 
   // Lock body scroll when the main page modal is open
@@ -300,6 +330,18 @@ function HomeContent() {
                 <p className="text-blue-200 leading-relaxed font-light mx-auto lg:mx-0 max-w-lg">
                   Founded in the vibrant streets of Dubai, Tahera brings the rich, aromatic heritage of Pakistan and the Middle East to your table. We believe that food is an experience that brings families and friends together.
                 </p>
+                
+                {/* ── BUTTON LINK TO THE NEW ABOUT PAGE ── */}
+                <div className="pt-4">
+                  <Link 
+                    href="/about" 
+                    className="inline-flex items-center justify-center gap-2 bg-white text-blue-950 px-8 py-3.5 rounded-xl font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+                  >
+                    Explore Our Story 
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                  </Link>
+                </div>
+
               </FadeLeft>
               <FadeDown className="relative h-[300px] sm:h-[400px] w-full rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-900">
                 <Image src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1000" alt="Restaurant Interior" fill className="object-cover" />
@@ -353,8 +395,8 @@ function HomeContent() {
             <div className="border-t border-slate-200 mt-6 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-400">
               <p className="text-center md:text-left">© {new Date().getFullYear()} Tahera Restaurant. All rights reserved.</p>
               <div className="flex gap-4">
-                <a href="#" className="hover:text-slate-600 transition-colors">Privacy Policy</a>
-                <a href="#" className="hover:text-slate-600 transition-colors">Terms of Service</a>
+                <a href="/privacy" className="hover:text-slate-600 transition-colors">Privacy Policy</a>
+                <a href="/terms" className="hover:text-slate-600 transition-colors">Terms of Service</a>
               </div>
             </div>
           </div>
