@@ -39,6 +39,10 @@ export const restaurants: Restaurant[] = [
       { name: 'Truffle Naan Basket',    desc: 'Freshly baked naan brushed with truffle butter.',                price: 'AED 35', img: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&q=80&w=600' },
       { name: 'Mutton Karahi',          desc: 'Slow-cooked mutton in rich tomato and ginger gravy.',            price: 'AED 75', img: 'https://images.unsplash.com/photo-1601728902047-9f6674971c26?auto=format&fit=crop&q=80&w=600' },
       { name: 'Mixed Grill Platter',    desc: 'Assorted kebabs, tikka, and seekh with mint chutney.',           price: 'AED 95', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=600' },
+       { name: 'Downtown Royal Biryani', desc: 'Fragrant basmati rice with tender chicken and aromatic spices.', price: 'AED 85', img: 'https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&q=80&w=600' },
+      { name: 'Truffle Naan Basket',    desc: 'Freshly baked naan brushed with truffle butter.',                price: 'AED 35', img: 'https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&q=80&w=600' },
+      { name: 'Mutton Karahi',          desc: 'Slow-cooked mutton in rich tomato and ginger gravy.',            price: 'AED 75', img: 'https://images.unsplash.com/photo-1601728902047-9f6674971c26?auto=format&fit=crop&q=80&w=600' },
+      { name: 'Mixed Grill Platter',    desc: 'Assorted kebabs, tikka, and seekh with mint chutney.',           price: 'AED 95', img: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=600' },
     ],
     reviews: [
       { author: 'Sara M.',    rating: 5, text: 'Absolutely stunning interior and the Biryani is life-changing!', date: 'May 2025' },

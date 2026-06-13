@@ -98,12 +98,6 @@ const MailIcon = () => (
     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
   </svg>
 );
-const ModalCloseIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M18 6 6 18" />
-    <path d="m6 6 12 12" />
-  </svg>
-);
 
 /* ── Social Icons ── */
 const InstagramIcon = () => (
@@ -142,19 +136,10 @@ const galleryImages = [
    HOME CONTENT COMPONENT
 ══════════════════════════════════════════ */
 function HomeContent() {
-  const [selectedBranch, setSelectedBranch] = useState<Restaurant | null>(null);
-  const [reviewForm, setReviewForm] = useState(false);
-  
   // State to track which restaurant's menu is showing in the homepage section
   const [activeMenuId, setActiveMenuId] = useState<string>(restaurants[0].id);
 
   const { addToCart } = useCart(); 
-
-  // Lock body scroll when the main page modal is open
-  useEffect(() => {
-    document.body.style.overflow = selectedBranch ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [selectedBranch]);
 
   // Find the currently selected restaurant for the menu section
   const activeRestaurantMenu = restaurants.find(r => r.id === activeMenuId) || restaurants[0];
@@ -188,14 +173,17 @@ function HomeContent() {
       <div className="bg-fixed-layer" aria-hidden="true" />
 
       {/* ── Render Navbar and CartDrawer ── */}
-      <Navbar 
-        restaurants={restaurants} 
-        onSelectMenu={(id) => {
-          setActiveMenuId(id);
-          // Auto-scroll to the menu section
-          document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' });
-        }} 
-      />
+      {(() => {
+        const navbarProps = ({
+          restaurants,
+          onSelectMenu: (id: any) => {
+            setActiveMenuId(id);
+            // Auto-scroll to the menu section
+            document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' });
+          },
+        } as any);
+        return <Navbar {...navbarProps} />;
+      })()}
       <CartDrawer />
 
       <div className="page-content">
@@ -222,7 +210,7 @@ function HomeContent() {
           </div>
         </section>
 
-        {/* ── BRANCHES GRID ── */}
+        {/* ── BRANCHES GRID (NOW LINKS TO PAGE) ── */}
         <section id="restaurants" className="pb-16 pt-16">
           <div className="container mx-auto px-6 md:px-12 max-w-[1200px]">
             <FadeUp className="text-center max-w-2xl mx-auto mb-12">
@@ -232,8 +220,9 @@ function HomeContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
               {restaurants.map((b, idx) => (
                 <FadeUp key={b.id} delay={idx * 50}>
-                  <div
-                    onClick={() => { setSelectedBranch(b); setReviewForm(false); }}
+                  {/* CHANGED FROM DIV TO LINK */}
+                  <Link
+                    href={`/restaurants/${b.id}`}
                     className="group cursor-pointer bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-blue-100 flex flex-col hover:-translate-y-1 transition-all duration-300 h-full relative"
                   >
                     <div className="relative h-48 w-full overflow-hidden">
@@ -250,7 +239,7 @@ function HomeContent() {
                       <h3 className="text-lg font-bold text-blue-950 mb-1.5 group-hover:text-blue-700 transition-colors">{b.name}</h3>
                       <p className="text-slate-500 text-sm line-clamp-2">{b.description}</p>
                     </div>
-                  </div>
+                  </Link>
                 </FadeUp>
               ))}
             </div>
@@ -403,115 +392,6 @@ function HomeContent() {
         </footer>
 
       </div>
-
-      {/* ── Modal Rendering logic ── */}
-      {selectedBranch && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-blue-950/60 backdrop-blur-sm">
-          <div className="bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col border-t-4 border-blue-900 relative">
-
-            <button
-              onClick={() => setSelectedBranch(null)}
-              className="absolute top-4 right-4 z-10 bg-white/80 hover:bg-white text-blue-900 p-2 rounded-full shadow-sm transition-colors"
-            >
-              <ModalCloseIcon />
-            </button>
-
-            <div className="relative h-48 md:h-60 shrink-0">
-              <Image src={selectedBranch.cover} alt={selectedBranch.name} fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-blue-950/90 via-blue-950/40 to-transparent" />
-              <div className="absolute bottom-5 left-6 right-6 flex flex-col items-start gap-2">
-                {selectedBranch.openingSoon && (
-                  <span className="bg-red-600 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-md">
-                    Opening Soon
-                  </span>
-                )}
-                <h2 className="text-xl md:text-3xl font-bold text-white">{selectedBranch.name}</h2>
-                <p className="text-blue-100 flex items-center gap-1.5 mt-1 text-xs md:text-sm font-medium">
-                  <MapPinIcon />{selectedBranch.location}
-                </p>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto p-5 md:p-9 modal-sb bg-white">
-              <p className="text-sm md:text-base text-slate-700 leading-relaxed mb-6 border-b border-blue-50 pb-5">
-                {selectedBranch.description}
-              </p>
-
-              {selectedBranch.openingSoon ? (
-                <div className="flex flex-col items-center justify-center py-10 md:py-12 bg-blue-50/50 border border-blue-100 rounded-xl text-center">
-                  <h3 className="text-xl md:text-2xl font-bold text-blue-950 mb-2">Get Ready!</h3>
-                  <p className="text-slate-500 text-sm md:text-lg max-w-md">We are preparing something special for you. Stay tuned for our full menu and grand opening dates.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
-                  {/* Specialties */}
-                  <div>
-                    <h3 className="text-lg md:text-xl font-bold text-blue-950 mb-4 md:mb-5">Specialties</h3>
-                    <div className="space-y-3">
-                      {selectedBranch.menu.map((d, i) => (
-                        <div
-                          key={i}
-                          className="flex justify-between items-center p-3 md:p-4 rounded-xl border border-slate-100 bg-slate-50 hover:border-blue-200 hover:bg-blue-50/50 transition-colors"
-                        >
-                          <span className="font-semibold text-slate-800 text-xs md:text-sm">{d.name}</span>
-                          <div className="flex items-center gap-3">
-                            <span className="text-red-600 font-bold text-xs md:text-sm">{d.price}</span>
-                            <button
-                              onClick={() => addToCart(d.name, d.price)}
-                              className="bg-blue-900 text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-blue-800 transition-colors text-lg pb-0.5 shadow-sm"
-                            >
-                              +
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Reviews */}
-                  <div>
-                    <div className="flex justify-between items-center mb-4 md:mb-5">
-                      <h3 className="text-lg md:text-xl font-bold text-blue-950">Guest Reviews</h3>
-                      <button
-                        onClick={() => setReviewForm((r) => !r)}
-                        className="text-xs md:text-sm font-bold text-blue-900 hover:text-blue-700 underline underline-offset-4"
-                      >
-                        {reviewForm ? 'Cancel' : 'Add Review'}
-                      </button>
-                    </div>
-
-                    {reviewForm ? (
-                      <div className="bg-blue-50/50 p-4 md:p-5 rounded-xl border border-blue-100 space-y-3">
-                        <input type="text" placeholder="Your Name" className="w-full p-2.5 md:p-3 rounded-lg border border-blue-200 text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((i) => <StarIcon key={i} filled={i <= 4} />)}
-                        </div>
-                        <textarea rows={3} placeholder="Write a review..." className="w-full p-2.5 md:p-3 rounded-lg border border-blue-200 text-xs md:text-sm focus:outline-none focus:ring-1 focus:ring-blue-400" />
-                        <button onClick={() => { alert('Review submitted!'); setReviewForm(false); }} className="w-full bg-blue-900 text-white font-bold py-2.5 md:py-3 rounded-lg hover:bg-blue-800 transition-colors text-xs md:text-sm">Submit</button>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        {selectedBranch.reviews.map((r, i) => (
-                          <div key={i} className="p-4 rounded-xl border border-slate-100 bg-white shadow-sm">
-                            <div className="flex justify-between items-center mb-2">
-                              <span className="font-bold text-slate-900 text-xs md:text-sm">{r.author}</span>
-                              <div className="flex gap-0.5">
-                                {[...Array(5)].map((_, j) => <StarIcon key={j} filled={j < r.rating} />)}
-                              </div>
-                            </div>
-                            <p className="text-slate-500 text-xs md:text-sm italic">"{r.text}"</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }

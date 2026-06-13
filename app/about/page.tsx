@@ -92,7 +92,7 @@ function AboutContent() {
         background: `radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.4) 0%, transparent 80%)`
       }} />
 
-      <Navbar restaurants={[]} onSelectMenu={() => {}} />
+      <Navbar restaurants={[]} />
       <CartDrawer />
 
       <div className="relative z-10">

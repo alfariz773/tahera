@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { Restaurant } from '../data/restaurants';
 
 const HamburgerIcon = () => (
@@ -21,7 +22,7 @@ const CloseIcon = () => (
 
 const NAV_LINKS = [
   { id: 'home',     label: 'Home' },
-  { id: 'menu',     label: 'Menu' },
+  { id: 'menu',     label: 'Menu' }, // <-- Changed back to 'Menu'
   { id: 'gallery',  label: 'Gallery' },
   { id: 'about',    label: 'About Us' },
   { id: 'contact',  label: 'Contact Us' },
@@ -29,13 +30,11 @@ const NAV_LINKS = [
 
 type NavbarProps = {
   restaurants: Restaurant[];
-  onSelectMenu: (id: string) => void;
 };
 
-export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
+export default function Navbar({ restaurants }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeTab,  setActiveTab]  = useState('home');
   const [menuDropdownOpen, setMenuDropdownOpen] = useState(false);
   const [mobileMenuExpanded, setMobileMenuExpanded] = useState(false);
 
@@ -44,14 +43,6 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const handleMenuSelect = (restaurantId: string) => {
-    onSelectMenu(restaurantId);
-    setActiveTab('menu');
-    setMenuDropdownOpen(false);
-    setMobileOpen(false);
-    setMobileMenuExpanded(false);
-  };
 
   return (
     <header
@@ -62,11 +53,7 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
       <div className="container mx-auto px-4 md:px-12 flex items-center justify-between max-w-[1400px]">
 
         {/* Logo */}
-        <a
-          href="#home"
-          onClick={() => setActiveTab('home')}
-          className="flex flex-col items-center gap-0.5 shrink-0 group"
-        >
+        <Link href="/" className="flex flex-col items-center gap-0.5 shrink-0 group">
           <Image
             src="/logo.jpeg"
             alt="Tahera"
@@ -75,11 +62,13 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
             className="rounded-full shadow-sm object-contain"
             priority
           />
-        </a>
+        </Link>
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center space-x-8 text-sm font-semibold uppercase tracking-wider text-slate-600 ml-auto">
           {NAV_LINKS.map(({ id, label }) => {
+            
+            // Dropdown for Menu
             if (id === 'menu') {
               return (
                 <div 
@@ -88,47 +77,42 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
                   onMouseEnter={() => setMenuDropdownOpen(true)}
                   onMouseLeave={() => setMenuDropdownOpen(false)}
                 >
-                  <a
-                    href={`#${id}`}
-                    onClick={() => setActiveTab(id)}
-                    className={`transition-colors py-1 flex items-center gap-1 ${
-                      activeTab === id ? 'text-blue-950 border-b-2 border-blue-950' : 'hover:text-blue-900'
-                    }`}
+                  <Link
+                    href="/#restaurants"
+                    className="transition-colors py-1 flex items-center gap-1 hover:text-blue-900"
                   >
                     {label}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 ${menuDropdownOpen ? 'rotate-180' : ''}`}>
                       <path d="m6 9 6 6 6-6"/>
                     </svg>
-                  </a>
+                  </Link>
                   
                   {/* Desktop Dropdown Box */}
                   <div className={`absolute top-full left-0 w-64 bg-white/95 backdrop-blur-md shadow-xl border border-slate-100 rounded-xl overflow-hidden transition-all duration-200 ${menuDropdownOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                     {restaurants.map(r => (
-                      <button
+                      <Link
                         key={r.id}
-                        onClick={() => handleMenuSelect(r.id)}
+                        href={`/restaurants/${r.id}`}
                         className="w-full text-left px-5 py-3 text-xs font-bold text-slate-600 hover:text-blue-950 hover:bg-blue-50 border-b border-slate-50 last:border-none transition-colors flex justify-between items-center"
                       >
                         {r.name}
                         {r.openingSoon && <span className="text-[9px] text-red-500 uppercase tracking-widest">Soon</span>}
-                      </button>
+                      </Link>
                     ))}
                   </div>
                 </div>
               );
             }
 
+            // Standard Links
             return (
-              <a
+              <Link
                 key={id}
-                href={`#${id}`}
-                onClick={() => setActiveTab(id)}
-                className={`transition-colors py-1 ${
-                  activeTab === id ? 'text-blue-950 border-b-2 border-blue-950' : 'hover:text-blue-900'
-                }`}
+                href={id === 'home' ? '/' : `/#${id}`}
+                className="transition-colors py-1 hover:text-blue-900"
               >
                 {label}
-              </a>
+              </Link>
             );
           })}
         </nav>
@@ -147,7 +131,7 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
       {mobileOpen && (
         <div className="lg:hidden absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-xl py-5 px-4 border-t border-slate-100 max-h-[85vh] overflow-y-auto">
           
-          {/* Main Links - Displayed in a Row */}
+          {/* Main Links */}
           <div className="flex flex-row flex-wrap justify-center items-center gap-x-4 gap-y-3">
             {NAV_LINKS.map(({ id, label }) => {
               if (id === 'menu') {
@@ -155,9 +139,7 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
                   <button
                     key={id}
                     onClick={() => setMobileMenuExpanded(!mobileMenuExpanded)}
-                    className={`text-[12px] font-bold uppercase tracking-widest transition-colors px-3 py-1.5 flex items-center gap-1 rounded-full ${
-                      activeTab === id ? 'bg-blue-50 text-blue-950' : 'text-slate-500 hover:text-red-600'
-                    }`}
+                    className="text-[12px] font-bold uppercase tracking-widest transition-colors px-3 py-1.5 flex items-center gap-1 rounded-full text-slate-500 hover:text-red-600"
                   >
                     {label}
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-200 ${mobileMenuExpanded ? 'rotate-180' : ''}`}>
@@ -168,31 +150,26 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
               }
 
               return (
-                <a
+                <Link
                   key={id}
-                  href={`#${id}`}
-                  onClick={() => {
-                    setActiveTab(id);
-                    setMobileOpen(false);
-                    setMobileMenuExpanded(false);
-                  }}
-                  className={`text-[12px] font-bold uppercase tracking-widest transition-colors px-3 py-1.5 rounded-full text-center ${
-                    activeTab === id ? 'bg-blue-50 text-blue-950' : 'text-slate-500 hover:text-red-600'
-                  }`}
+                  href={id === 'home' ? '/' : `/#${id}`}
+                  onClick={() => setMobileOpen(false)}
+                  className="text-[12px] font-bold uppercase tracking-widest transition-colors px-3 py-1.5 rounded-full text-center text-slate-500 hover:text-red-600"
                 >
                   {label}
-                </a>
+                </Link>
               );
             })}
           </div>
 
-          {/* Expanded Restaurant List - Appears Below the Row */}
+          {/* Expanded Restaurant List Mobile */}
           {mobileMenuExpanded && (
             <div className="w-full flex flex-col mt-5 bg-slate-50/80 rounded-xl border border-slate-200/60 overflow-hidden shadow-inner">
               {restaurants.map((r, index) => (
-                <button
+                <Link
                   key={r.id}
-                  onClick={() => handleMenuSelect(r.id)}
+                  href={`/restaurants/${r.id}`}
+                  onClick={() => setMobileOpen(false)}
                   className={`w-full text-left px-4 py-3.5 text-[13px] font-semibold text-slate-600 active:bg-slate-200 transition-colors flex justify-between items-center ${
                     index !== restaurants.length - 1 ? 'border-b border-slate-200/60' : ''
                   }`}
@@ -203,7 +180,7 @@ export default function Navbar({ restaurants, onSelectMenu }: NavbarProps) {
                       Soon
                     </span>
                   )}
-                </button>
+                </Link>
               ))}
             </div>
           )}
