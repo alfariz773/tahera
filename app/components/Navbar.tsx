@@ -22,7 +22,7 @@ const CloseIcon = () => (
 
 const NAV_LINKS = [
   { id: 'home',     label: 'Home' },
-  { id: 'menu',     label: 'Menu' }, // <-- Changed back to 'Menu'
+  { id: 'menu',     label: 'Menu' }, 
   { id: 'gallery',  label: 'Gallery' },
   { id: 'about',    label: 'About Us' },
   { id: 'contact',  label: 'Contact Us' },
@@ -104,11 +104,11 @@ export default function Navbar({ restaurants }: NavbarProps) {
               );
             }
 
-            // Standard Links
+            // Standard Links (Routing fixed for /about and /contact)
             return (
               <Link
                 key={id}
-                href={id === 'home' ? '/' : `/#${id}`}
+                href={id === 'home' ? '/' : id === 'about' ? '/about' : id === 'contact' ? '/contact' : `/#${id}`}
                 className="transition-colors py-1 hover:text-blue-900"
               >
                 {label}
@@ -149,10 +149,11 @@ export default function Navbar({ restaurants }: NavbarProps) {
                 );
               }
 
+              // Standard Links (Routing fixed for /about and /contact)
               return (
                 <Link
                   key={id}
-                  href={id === 'home' ? '/' : `/#${id}`}
+                  href={id === 'home' ? '/' : id === 'about' ? '/about' : id === 'contact' ? '/contact' : `/#${id}`}
                   onClick={() => setMobileOpen(false)}
                   className="text-[12px] font-bold uppercase tracking-widest transition-colors px-3 py-1.5 rounded-full text-center text-slate-500 hover:text-red-600"
                 >
