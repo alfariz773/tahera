@@ -32,7 +32,7 @@ export const restaurants: Restaurant[] = [
     location: 'Jumeirah Village Circle',
     address: 'Shop 2, Building 27, JVC District 14, Jumeirah Village Circle, Dubai',
     mapUrl: 'https://maps.google.com/maps?q=Tahera+Restaurant+JVC,+Dubai&output=embed',
-    cover: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=1600',
+    cover: '/jvc_image.png',
     description: 'Our vibrant neighborhood branch in the heart of JVC, offering authentic comfort food and an inviting family atmosphere.',
     menu: [
       { name: 'Downtown Royal Biryani', desc: 'Fragrant basmati rice with tender chicken and aromatic spices.', price: 'AED 85', img: 'https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&q=80&w=600' },
@@ -55,7 +55,7 @@ export const restaurants: Restaurant[] = [
     location: 'Port Saeed, Dubai',
     address: 'Port Saeed Road, Near Deira City Centre, Dubai',
     mapUrl: 'https://maps.google.com/maps?q=Tahera+Restaurant+Port+Saeed,+Dubai&output=embed',
-    cover: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1600',
+    cover: '/port saeed.png',
     description: 'A premium dining destination in Port Saeed, famous for its riverside ambiance and authentic Pakistani cuisine.',
     menu: [
       { name: 'Nihari Special',        desc: 'Slow-braised beef shank in rich spiced gravy, served with naan.',   price: 'AED 65', img: 'https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&q=80&w=600' },
@@ -74,7 +74,7 @@ export const restaurants: Restaurant[] = [
     location: 'Arjan, Dubai',
     address: 'Arjan Community, Dubailand, Dubai',
     mapUrl: 'https://maps.google.com/maps?q=Tahera+Restaurant+Arjan,+Dubai&output=embed',
-    cover: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&q=80&w=1600',
+    cover: '/Arjan.png',
     description: 'A beautifully modern dining space in Arjan with rich flavors and perfect mood lighting for dinner dates.',
     menu: [
       { name: 'Seafood Platter',   desc: 'Grilled prawns, calamari, and hammour with garlic sauce.',   price: 'AED 145', img: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&q=80&w=600' },
@@ -93,7 +93,7 @@ export const restaurants: Restaurant[] = [
     location: 'Meena Bazaar, Bur Dubai',
     address: 'Meena Bazaar Street, Bur Dubai, Dubai',
     mapUrl: 'https://maps.google.com/maps?q=Tahera+Restaurant+Meena+Bazaar,+Dubai&output=embed',
-    cover: 'https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1600',
+    cover: '/meena_1.png',
     description: 'Experience the bustling old Dubai street food culture with our aromatic curries and traditional charcoal grills.',
     menu: [
       { name: 'Special Karahi',         desc: 'Chicken karahi cooked in iron wok with tomatoes and green chilli.', price: 'AED 75', img: 'https://images.unsplash.com/photo-1601728902047-9f6674971c26?auto=format&fit=crop&q=80&w=600' },
@@ -112,7 +112,7 @@ export const restaurants: Restaurant[] = [
     location: 'Bur Dubai',
     address: 'Khalid Bin Walid Road, Bur Dubai, Dubai',
     mapUrl: 'https://maps.google.com/maps?q=Tahera+Restaurant+Bur+Dubai,+Dubai&output=embed',
-    cover: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=1600',
+    cover: '/th_bar_dubai.png',
     description: 'Our Bur Dubai branch is a local favourite serving hearty portions of classic Pakistani and Emirati dishes.',
     menu: [
       { name: 'Classic Mutton Pulao', desc: 'Fragrant rice slow-cooked with tender mutton pieces.',            price: 'AED 55', img: 'https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&q=80&w=600' },
@@ -131,7 +131,7 @@ export const restaurants: Restaurant[] = [
     location: 'Jumeirah Village Circle',
     address: 'Ground Floor, Circle Mall, JVC, Dubai',
     mapUrl: 'https://maps.google.com/maps?q=T+Grills+Cafe+and+Restaurant+JVC,+Dubai&output=embed',
-    cover: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80&w=1600',
+    cover: '/tgrill_jvc.png',
     description: 'T Grills is our cafe-style grill concept inside Circle Mall JVC — fast, casual, and packed with bold flavors.',
     menu: [
       { name: 'T-Grill Signature Burger', desc: 'Double smash patty, special sauce, pickled onions.',         price: 'AED 55', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&q=80&w=600' },
@@ -150,11 +150,10 @@ export const restaurants: Restaurant[] = [
     location: 'Al Marjan Island, Ras Al Khaimah',
     address: 'Al Marjan Island Boulevard, Ras Al Khaimah',
     mapUrl: 'https://maps.google.com/maps?q=Al+Marjan+Island,+Ras+Al+Khaimah&output=embed',
-    cover: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=1600',
+    cover: '/t_grill_marjan.png',
     description: 'Our island escape. T Grill Marjan brings sizzling grills and fresh seafood to the beautiful shores of Al Marjan Island.',
     menu: [],
     reviews: [],
-    openingSoon: true // Coming Soon Flag!
   },
   {
     id: 'production-city',

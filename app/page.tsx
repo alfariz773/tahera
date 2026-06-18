@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // <-- IMPORTED NEXT.JS LINK
+import Link from 'next/link';
 import Navbar from './components/Navbar';
 import CartDrawer from './components/CartDrawer';
 import { useCart, CartProvider } from './context/CartContext'; 
@@ -75,50 +75,6 @@ function FadeDown({ children, delay = 0, className = '' }: AnimProps) {
   );
 }
 
-/* ── Icons ── */
-const StarIcon = ({ filled }: { filled?: boolean }) => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill={filled ? '#DC2626' : 'none'} stroke={filled ? '#DC2626' : '#fca5a5'} strokeWidth="2">
-    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-  </svg>
-);
-const MapPinIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
-    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-    <circle cx="12" cy="10" r="3" />
-  </svg>
-);
-const PhoneIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.88 11.9a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-  </svg>
-);
-const MailIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'block', flexShrink: 0 }}>
-    <rect width="20" height="16" x="2" y="4" rx="2"/>
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-  </svg>
-);
-
-/* ── Social Icons ── */
-const InstagramIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-  </svg>
-);
-const FacebookIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-  </svg>
-);
-const TwitterIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M22 4.01c-1 .49-1.98.689-3 .99-1.121-1.265-2.783-1.335-4.38-.737S11.977 6.323 12 8v1c-3.245.083-6.135-1.395-8-4 0 0-4.182 7.433 4 11-1.872 1.247-3.739 2.088-6 2 3.308 1.803 6.913 2.423 10.034 1.517 3.58-1.04 6.522-3.723 7.651-7.742a13.84 13.84 0 0 0 .497-3.753C20.18 7.773 21.692 5.25 22 4.009z"></path>
-  </svg>
-);
-
-/* ── Static data ── */
 const menuItems = [
   { name: 'Authentic Chicken Biryani', desc: 'Fragrant basmati rice cooked with tender chicken and exotic spices.', price: 'AED 45', img: 'https://images.unsplash.com/photo-1631515243349-e0cb75fb8d3a?auto=format&fit=crop&q=80&w=800' },
   { name: 'Peshawari Mutton Karahi',   desc: 'Slow-cooked mutton in a rich tomato base.',                           price: 'AED 65', img: 'https://images.unsplash.com/photo-1601728902047-9f6674971c26?auto=format&fit=crop&q=80&w=800' },
@@ -136,13 +92,51 @@ const galleryImages = [
    HOME CONTENT COMPONENT
 ══════════════════════════════════════════ */
 function HomeContent() {
-  // State to track which restaurant's menu is showing in the homepage section
   const [activeMenuId, setActiveMenuId] = useState<string>(restaurants[0].id);
-
+  const [heroLoaded, setHeroLoaded] = useState(false);
   const { addToCart } = useCart(); 
-
-  // Find the currently selected restaurant for the menu section
   const activeRestaurantMenu = restaurants.find(r => r.id === activeMenuId) || restaurants[0];
+
+  useEffect(() => {
+    const t = setTimeout(() => setHeroLoaded(true), 80);
+    return () => clearTimeout(t);
+  }, []);
+
+  /* ── Hero cursor-reactive tilt + glow tracking ── */
+  const heroRef = useRef<HTMLDivElement>(null);
+  const dishWrapRef = useRef<HTMLDivElement>(null);
+  const [heroHover, setHeroHover] = useState(false);
+
+  const handleHeroPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const heroEl = heroRef.current;
+    if (!heroEl) return;
+    const heroRect = heroEl.getBoundingClientRect();
+
+    const px = ((e.clientX - heroRect.left) / heroRect.width) * 100;
+    const py = ((e.clientY - heroRect.top) / heroRect.height) * 100;
+    heroEl.style.setProperty('--cx', `${px}%`);
+    heroEl.style.setProperty('--cy', `${py}%`);
+
+    const dishEl = dishWrapRef.current;
+    if (dishEl) {
+      const dishRect = dishEl.getBoundingClientRect();
+      const dx = (e.clientX - (dishRect.left + dishRect.width / 2)) / (dishRect.width / 2);
+      const dy = (e.clientY - (dishRect.top + dishRect.height / 2)) / (dishRect.height / 2);
+      const clampedX = Math.max(-1, Math.min(1, dx));
+      const clampedY = Math.max(-1, Math.min(1, dy));
+      dishEl.style.setProperty('--tiltX', `${(-clampedY * 14).toFixed(2)}deg`);
+      dishEl.style.setProperty('--tiltY', `${(clampedX * 14).toFixed(2)}deg`);
+    }
+  };
+
+  const handleHeroPointerLeave = () => {
+    setHeroHover(false);
+    const dishEl = dishWrapRef.current;
+    if (dishEl) {
+      dishEl.style.setProperty('--tiltX', '0deg');
+      dishEl.style.setProperty('--tiltY', '0deg');
+    }
+  };
 
   return (
     <div className="min-h-screen font-sans text-gray-900 overflow-x-hidden" style={{ background: '#fff' }}>
@@ -160,11 +154,244 @@ function HomeContent() {
             radial-gradient(ellipse 44% 30% at 92% 95%,  rgba(30, 58, 138, 0.10) 0%, transparent 50%);
         }
         .page-content { position: relative; z-index: 1; }
+
+        /* ── Hero dish float (slightly more organic — tiny rotation + lift) ── */
         @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50%       { transform: translateY(-14px); }
+          0%   { transform: translateY(0) rotate(0deg); }
+          50%  { transform: translateY(-16px) rotate(1.2deg); }
+          100% { transform: translateY(0) rotate(0deg); }
         }
         .float-anim { animation: float 6s ease-in-out infinite; }
+
+        /* ── Contact shadow beneath the plate, breathing opposite the float ── */
+        @keyframes hero-shadow-pulse {
+          0%, 100% { transform: translateX(-50%) scaleX(1);    opacity: 0.32; }
+          50%      { transform: translateX(-50%) scaleX(0.82); opacity: 0.18; }
+        }
+        .hero-shadow { animation: hero-shadow-pulse 6s ease-in-out infinite; }
+
+        /* ── Soft ambient glow blobs behind the dish ── */
+        @keyframes glow-pulse-a {
+          0%, 100% { transform: scale(1) translate(0,0);     opacity: 0.55; }
+          50%      { transform: scale(1.12) translate(10px,-6px); opacity: 0.8; }
+        }
+        @keyframes glow-pulse-b {
+          0%, 100% { transform: scale(1) translate(0,0);      opacity: 0.45; }
+          50%      { transform: scale(1.15) translate(-12px,8px); opacity: 0.7; }
+        }
+        .hero-glow-a { animation: glow-pulse-a 7s ease-in-out infinite; }
+        .hero-glow-b { animation: glow-pulse-b 8s ease-in-out infinite; }
+
+        /* ── Orbiting rings around the dish ── */
+        @keyframes spin-slow   { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes spin-rev    { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+        .hero-ring-1 { animation: spin-slow 22s linear infinite; }
+        .hero-ring-2 { animation: spin-rev 30s linear infinite; }
+
+        /* ── Small dots orbiting at different radii, carried by the ring rotation ── */
+        .hero-orbit-dot { filter: drop-shadow(0 2px 6px rgba(0,0,0,0.15)); }
+
+        /* ── Sparkle twinkle accents scattered in the empty space ── */
+        @keyframes twinkle {
+          0%, 100% { opacity: 0.15; transform: scale(0.8); }
+          50%      { opacity: 0.9;  transform: scale(1.15); }
+        }
+        .hero-sparkle { animation: twinkle 3.2s ease-in-out infinite; }
+
+        /* ══════════════════════════════════════════
+           PREMIUM HOVER — used on the hero dish
+           Light traces the object's own silhouette;
+           no background blobs, no flat shadow ellipse.
+        ══════════════════════════════════════════ */
+        .hero-section {
+          --cx: 50%;
+          --cy: 50%;
+        }
+
+        /* Dish 3D tilt toward cursor — kept subtle, this is the "premium" core motion */
+        .hero-dish-tilt {
+          --tiltX: 0deg;
+          --tiltY: 0deg;
+          transform: perspective(1000px) rotateX(var(--tiltX)) rotateY(var(--tiltY));
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          transform-style: preserve-3d;
+        }
+        .hero-section.is-hovering .hero-dish-tilt {
+          transition: transform 0.15s ease-out;
+        }
+        .hero-dish-scale {
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+          transform: scale(1);
+        }
+        .hero-section.is-hovering .hero-dish-scale {
+          transform: scale(1.03);
+        }
+        .hero-section.is-hovering .hero-dish-scale .float-anim {
+          filter: drop-shadow(0 24px 30px rgba(30,58,138,0.22)) drop-shadow(0 0 36px rgba(249,115,22,0.18));
+        }
+
+        /* Rim-light: a slim glowing arc that traces along the plate's own edge, only on hover */
+        .hero-rim-light {
+          position: absolute;
+          inset: 6%;
+          border-radius: 50%;
+          pointer-events: none;
+          opacity: 0;
+          transition: opacity 0.45s ease;
+          background: conic-gradient(from var(--rim-angle, 0deg), transparent 0deg, rgba(249,115,22,0.55) 18deg, transparent 50deg, transparent 310deg, rgba(30,58,138,0.45) 342deg, transparent 360deg);
+          -webkit-mask: radial-gradient(circle, transparent 62%, black 64%, black 68%, transparent 70%);
+          mask: radial-gradient(circle, transparent 62%, black 64%, black 68%, transparent 70%);
+          filter: blur(1px);
+        }
+        .hero-section.is-hovering .hero-rim-light {
+          opacity: 1;
+          animation: rim-rotate 4s linear infinite;
+        }
+        @keyframes rim-rotate {
+          from { --rim-angle: 0deg; }
+          to   { --rim-angle: 360deg; }
+        }
+
+        /* Light particles: tiny embers drifting upward past the dish on hover, premium-feeling */
+        .hero-ember {
+          position: absolute;
+          border-radius: 50%;
+          pointer-events: none;
+          opacity: 0;
+          background: radial-gradient(circle, rgba(249,115,22,0.9), rgba(249,115,22,0));
+        }
+        .hero-section.is-hovering .hero-ember {
+          animation: ember-rise 2.6s ease-in infinite;
+        }
+        @keyframes ember-rise {
+          0%   { opacity: 0; transform: translateY(0) scale(0.6); }
+          15%  { opacity: 0.9; }
+          80%  { opacity: 0.35; }
+          100% { opacity: 0; transform: translateY(-90px) scale(1); }
+        }
+
+        /* Faint single-pass sheen sweeping across the dish once per hover-enter */
+        .hero-sheen {
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          pointer-events: none;
+          overflow: hidden;
+        }
+        .hero-sheen::after {
+          content: '';
+          position: absolute;
+          top: -20%;
+          left: -60%;
+          width: 40%;
+          height: 140%;
+          background: linear-gradient(115deg, transparent, rgba(255,255,255,0.55), transparent);
+          transform: translateX(0) rotate(8deg);
+          opacity: 0;
+        }
+        .hero-section.is-hovering .hero-sheen::after {
+          animation: sheen-sweep 1.1s ease-out;
+        }
+        @keyframes sheen-sweep {
+          0%   { transform: translateX(-40%) rotate(8deg); opacity: 0; }
+          15%  { opacity: 0.9; }
+          100% { transform: translateX(340%) rotate(8deg); opacity: 0; }
+        }
+
+        /* ── Hero text choreography ── */
+        .hero-line {
+          display: block;
+          overflow: hidden;
+        }
+        .hero-line span {
+          display: inline-block;
+          transform: translateY(110%);
+          opacity: 0;
+          transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.7s ease;
+        }
+        .hero-loaded .hero-line span { transform: translateY(0); opacity: 1; }
+
+        .hero-eyebrow {
+          opacity: 0;
+          transform: translateY(10px);
+          transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .hero-loaded .hero-eyebrow { opacity: 1; transform: translateY(0); }
+
+        .hero-eyebrow-rule {
+          display: inline-block;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #f97316, #ef4444);
+          margin-right: 10px;
+          vertical-align: middle;
+          border-radius: 2px;
+          transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s;
+        }
+        .hero-loaded .hero-eyebrow-rule { width: 28px; }
+
+        .hero-para {
+          opacity: 0;
+          transform: translateY(14px);
+          transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .hero-loaded .hero-para { opacity: 1; transform: translateY(0); }
+
+        /* ── Scroll cue at the base of the hero ── */
+        @keyframes scroll-cue-bob {
+          0%, 100% { transform: translateY(0); opacity: 0.55; }
+          50%      { transform: translateY(8px); opacity: 1; }
+        }
+        .hero-scroll-cue { animation: scroll-cue-bob 2.2s ease-in-out infinite; }
+
+        /* ── Standard hover cards ── */
+        .standard-hover-card {
+          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+        }
+        .standard-hover-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 18px 30px -10px rgba(30,58,138,0.18), 0 0 0 1px rgba(249,115,22,0.25);
+          border-color: rgba(249,115,22,0.35);
+        }
+        .standard-hover-media {
+          overflow: hidden;
+        }
+        .standard-hover-media img {
+          transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+        }
+        .standard-hover-card:hover .standard-hover-media img {
+          transform: scale(1.08);
+          filter: saturate(1.12) brightness(1.03);
+        }
+        .standard-hover-underline {
+          display: inline-block;
+          position: relative;
+        }
+        .standard-hover-underline::after {
+          content: '';
+          position: absolute;
+          left: 0; bottom: -3px;
+          width: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #f97316, #ef4444);
+          transition: width 0.35s ease;
+        }
+        .standard-hover-card:hover .standard-hover-underline::after {
+          width: 100%;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .float-anim, .hero-shadow, .hero-glow-a, .hero-glow-b,
+          .hero-ring-1, .hero-ring-2, .hero-sparkle, .hero-scroll-cue,
+          .hero-rim-light, .hero-ember, .hero-sheen::after {
+            animation: none !important;
+          }
+          .hero-dish-tilt, .hero-dish-scale, .standard-hover-card, .standard-hover-media img {
+            transition: none !important;
+            transform: none !important;
+          }
+        }
+
         .modal-sb::-webkit-scrollbar       { width: 5px; }
         .modal-sb::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 8px; }
         .modal-sb::-webkit-scrollbar-thumb { background: #1e3a8a; border-radius: 8px; }
@@ -172,13 +399,11 @@ function HomeContent() {
 
       <div className="bg-fixed-layer" aria-hidden="true" />
 
-      {/* ── Render Navbar and CartDrawer ── */}
       {(() => {
         const navbarProps = ({
           restaurants,
           onSelectMenu: (id: any) => {
             setActiveMenuId(id);
-            // Auto-scroll to the menu section
             document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' });
           },
         } as any);
@@ -189,28 +414,94 @@ function HomeContent() {
       <div className="page-content">
 
         {/* ── HERO ── */}
-        <section id="home" className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden">
-          <div className="container mx-auto px-6 md:px-12 max-w-[1100px]">
+        <section
+          id="home"
+          ref={heroRef}
+          onPointerMove={handleHeroPointerMove}
+          onPointerEnter={() => setHeroHover(true)}
+          onPointerLeave={handleHeroPointerLeave}
+          className={`hero-section relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden ${heroHover ? 'is-hovering' : ''}`}
+        >
+          <div className="container mx-auto px-6 md:px-12 max-w-[1100px] relative">
+
+            {/* Scattered sparkle accents */}
+            <div className="absolute -top-4 left-[8%] w-2 h-2 rounded-full bg-orange-400 hero-sparkle hidden md:block" aria-hidden="true" style={{ animationDelay: '0.4s' }} />
+            <div className="absolute top-1/3 left-[2%] w-1.5 h-1.5 rounded-full bg-blue-700 hero-sparkle hidden lg:block" aria-hidden="true" style={{ animationDelay: '1.1s' }} />
+            <div className="absolute bottom-10 left-[18%] w-2 h-2 rounded-full bg-red-500 hero-sparkle hidden md:block" aria-hidden="true" style={{ animationDelay: '1.8s' }} />
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center text-center lg:text-left">
-              <FadeLeft>
-                <h2 className="text-xl md:text-2xl font-medium text-blue-900 mb-3 tracking-tight">Welcome to Tahera Restaurant</h2>
+              <div className={heroLoaded ? 'hero-loaded' : ''}>
+                <h2 className="hero-eyebrow text-xl md:text-2xl font-medium text-blue-900 mb-3 tracking-tight">
+                  <span className="hero-eyebrow-rule" aria-hidden="true" />
+                  Dine With Tahera
+                </h2>
                 <h1 className="text-[44px] md:text-[68px] lg:text-[76px] font-bold text-blue-950 leading-[1.05] mb-7 mx-auto lg:mx-0 max-w-lg">
-                  Authentic<br />Flavours<br />of Dubai
+                  <span className="hero-line"><span style={{ transitionDelay: '120ms' }}>A Tapestry  </span></span>
+                  <span className="hero-line"><span style={{ transitionDelay: '240ms' }}>of Asian</span></span>
+                  <span className="hero-line"><span style={{ transitionDelay: '360ms' }}>Flavours</span></span>
                 </h1>
-                <p className="text-base md:text-lg text-slate-600 leading-relaxed font-light max-w-md mx-auto lg:mx-0">
-                  From hearty breakfasts to satisfying lunches and dinner favourites, our menu offers comfort food with vibrant flavours that keep guests coming back.
-                </p>
-              </FadeLeft>
-              <FadeRight className="flex justify-center lg:justify-end items-center h-[300px] md:h-[450px] mt-2 lg:mt-0">
-                <div className="relative w-[280px] h-[280px] md:w-[420px] md:h-[420px] float-anim">
-                  <Image src="/transparent-dish.png" alt="Tahera Signature Dish" fill className="object-contain drop-shadow-[0_18px_28px_rgba(30,58,138,0.15)]" priority />
+                <p className="hero-para text-base md:text-lg text-slate-600 leading-relaxed font-light max-w-md mx-auto lg:mx-0" style={{ transitionDelay: '520ms' }}>
+Savor the perfect blend of Pakistani, Indian, and Chinese cuisine. From hearty breakfasts to grand dinners, enjoy vibrant comfort food crafted to satisfy every craving        </p>
+              </div>
+
+              <FadeRight className="relative flex justify-center lg:justify-end items-center h-[340px] md:h-[520px] mt-2 lg:mt-0">
+
+                {/* Ambient glow blobs filling the space around the dish */}
+                <div className="hero-glow-a absolute w-[260px] h-[260px] md:w-[380px] md:h-[380px] rounded-full bg-orange-300/30 blur-3xl pointer-events-none" aria-hidden="true" />
+                <div className="hero-glow-b absolute w-[220px] h-[220px] md:w-[320px] md:h-[320px] rounded-full bg-blue-500/25 blur-3xl pointer-events-none translate-x-10 translate-y-6" aria-hidden="true" />
+
+                {/* Orbiting dashed rings around the dish */}
+                <svg className="hero-ring-1 absolute w-[300px] h-[300px] md:w-[460px] md:h-[460px] pointer-events-none" viewBox="0 0 460 460" aria-hidden="true">
+                  <circle cx="230" cy="230" r="210" fill="none" stroke="#f97316" strokeOpacity="0.35" strokeWidth="1.5" strokeDasharray="2 14" />
+                </svg>
+                <svg className="hero-ring-2 absolute w-[250px] h-[250px] md:w-[390px] md:h-[390px] pointer-events-none" viewBox="0 0 390 390" aria-hidden="true">
+                  <circle cx="195" cy="195" r="178" fill="none" stroke="#1e3a8a" strokeOpacity="0.3" strokeWidth="1.5" strokeDasharray="1 10" />
+                </svg>
+
+                {/* Small accent dots carried around the outer ring */}
+                <div className="hero-ring-1 absolute w-[300px] h-[300px] md:w-[460px] md:h-[460px] pointer-events-none" aria-hidden="true">
+                  <span className="hero-orbit-dot absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 md:w-4 md:h-4 rounded-full bg-orange-500" />
+                </div>
+                <div className="hero-ring-2 absolute w-[250px] h-[250px] md:w-[390px] md:h-[390px] pointer-events-none" aria-hidden="true">
+                  <span className="hero-orbit-dot absolute bottom-2 left-[15%] w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-blue-700" />
+                </div>
+
+                {/* Contact shadow grounding the floating plate */}
+                <div className="hero-shadow absolute left-1/2 bottom-[14%] w-[180px] md:w-[260px] h-[26px] md:h-[34px] bg-blue-950/40 blur-xl rounded-full pointer-events-none" aria-hidden="true" />
+
+                {/* Tilt wrapper: rotates toward the cursor on hover */}
+                <div ref={dishWrapRef} className="hero-dish-tilt relative">
+
+                  {/* Premium rim-light: traces along the plate's own circular edge, only on hover */}
+                  <div className="hero-rim-light" aria-hidden="true" />
+
+                  {/* Sheen sweep across the dish on hover-enter */}
+                  <div className="hero-sheen" aria-hidden="true" />
+
+                  {/* Drifting embers rising past the dish on hover */}
+                  <span className="hero-ember w-1.5 h-1.5" style={{ left: '18%', bottom: '10%', animationDelay: '0s' }} aria-hidden="true" />
+                  <span className="hero-ember w-1 h-1" style={{ left: '72%', bottom: '6%', animationDelay: '0.6s' }} aria-hidden="true" />
+                  <span className="hero-ember w-1.5 h-1.5" style={{ left: '48%', bottom: '2%', animationDelay: '1.2s' }} aria-hidden="true" />
+                  <span className="hero-ember w-1 h-1" style={{ left: '30%', bottom: '14%', animationDelay: '1.8s' }} aria-hidden="true" />
+
+                  <div className="hero-dish-scale relative w-[280px] h-[280px] md:w-[420px] md:h-[420px] float-anim">
+                    <Image src="/transparent-dish.png" alt="Tahera Signature Dish" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-contain drop-shadow-[0_18px_28px_rgba(30,58,138,0.15)]" priority />
+                  </div>
                 </div>
               </FadeRight>
+            </div>
+
+            {/* Scroll cue */}
+            <div className="hidden md:flex hero-scroll-cue absolute left-1/2 -translate-x-1/2 bottom-[-2rem] flex-col items-center gap-2 text-blue-900/50" aria-hidden="true">
+              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase">Scroll</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
             </div>
           </div>
         </section>
 
-        {/* ── BRANCHES GRID (NOW LINKS TO PAGE) ── */}
+        {/* ── BRANCHES GRID ── */}
         <section id="restaurants" className="pb-16 pt-16">
           <div className="container mx-auto px-6 md:px-12 max-w-[1200px]">
             <FadeUp className="text-center max-w-2xl mx-auto mb-12">
@@ -220,13 +511,12 @@ function HomeContent() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 lg:gap-8">
               {restaurants.map((b, idx) => (
                 <FadeUp key={b.id} delay={idx * 50}>
-                  {/* CHANGED FROM DIV TO LINK */}
                   <Link
                     href={`/restaurants/${b.id}`}
                     className="group cursor-pointer bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-blue-100 flex flex-col hover:-translate-y-1 transition-all duration-300 h-full relative"
                   >
                     <div className="relative h-48 w-full overflow-hidden">
-                      <Image src={b.cover} alt={b.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <Image src={b.cover} alt={b.name} fill  className="object-cover group-hover:scale-105 transition-transform duration-700" />
                       {b.openingSoon && (
                         <div className="absolute inset-0 bg-blue-950/40 backdrop-blur-[2px] flex items-center justify-center transition-opacity duration-300 group-hover:bg-blue-950/60">
                           <span className="bg-red-600 text-white text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-md shadow-md transform -rotate-2">
@@ -247,7 +537,7 @@ function HomeContent() {
         </section>
 
         {/* ── MENU ── */}
-        <section id="menu" className="py-20 bg-slate-50/50">
+        {/* <section id="menu" className="py-20 bg-slate-50/50">
           <div className="container mx-auto px-6 md:px-12 max-w-[1200px]">
             <FadeUp className="text-center max-w-2xl mx-auto mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-blue-950 tracking-tight">
@@ -288,7 +578,7 @@ function HomeContent() {
               </div>
             )}
           </div>
-        </section>
+        </section> */}
 
         {/* ── GALLERY ── */}
         <section id="gallery" className="py-20">
@@ -320,7 +610,6 @@ function HomeContent() {
                   Founded in the vibrant streets of Dubai, Tahera brings the rich, aromatic heritage of Pakistan and the Middle East to your table. We believe that food is an experience that brings families and friends together.
                 </p>
                 
-                {/* ── BUTTON LINK TO THE NEW ABOUT PAGE ── */}
                 <div className="pt-4">
                   <Link 
                     href="/about" 
@@ -339,7 +628,7 @@ function HomeContent() {
           </div>
         </section>
 
-        {/* ── ULTRA-SLEEK HORIZONTAL FOOTER ── */}
+        {/* ── FOOTER ── */}
         <footer id="contact" className="bg-slate-50 border-t border-slate-200 py-8">
           <div className="container mx-auto px-6 max-w-[1200px]">
             <div className="flex flex-col lg:flex-row justify-between items-center gap-6 lg:gap-8">
