@@ -4,6 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
+import CartDrawer from '../components/CartDrawer';
+import { CartProvider } from '../context/CartContext'; 
+
 /* ─────────────────────────────────────────
    Scroll-reveal hook
 ───────────────────────────────────────── */
@@ -89,8 +92,8 @@ function AboutContent() {
         background: `radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.4) 0%, transparent 80%)`
       }} />
 
-      <Navbar/>
-      
+      <Navbar />
+      <CartDrawer />
 
       <div className="relative z-10">
         
@@ -98,9 +101,10 @@ function AboutContent() {
         <section className="relative min-h-[70vh] flex items-center justify-center pt-20">
           <div className="absolute inset-0 z-0">
             <Image 
-              src="https://images.unsplash.com/photo-1544148103-0773bf10d330?auto=format&fit=crop&q=80&w=1600" 
+              src="/gallery/gallery-1.jpg" 
               alt="Grill Fire" 
               fill 
+              sizes="100vw"
               className="object-cover opacity-20 mix-blend-overlay"
               priority
             />
@@ -159,10 +163,10 @@ function AboutContent() {
               {/* Image Side (Spans 7 columns with overlapping layout) */}
               <div className="lg:col-span-7 relative h-[500px] md:h-[650px] order-1 lg:order-2 w-full">
                 <FadeRight delay={100} className="absolute top-0 right-0 w-3/4 h-[75%] rounded-2xl overflow-hidden shadow-2xl border border-blue-800/50 z-10">
-                  <Image src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&q=80&w=1000" alt="Restaurant interior" fill className="object-cover" />
+                  <Image src="/jvc_image.png" alt="Restaurant interior" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
                 </FadeRight>
                 <FadeUp delay={300} className="absolute bottom-0 left-0 w-2/3 h-[55%] rounded-2xl overflow-hidden shadow-2xl border border-blue-800/50 z-20">
-                  <Image src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&q=80&w=800" alt="Spices" fill className="object-cover" />
+                  <Image src="/gallery/gallery-4.jpg" alt="Restaurant gallery image" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
                 </FadeUp>
               </div>
 
@@ -223,7 +227,7 @@ function AboutContent() {
               <h2 className="text-3xl md:text-5xl font-light text-white mb-6 font-serif">Experience it for yourself.</h2>
               <p className="text-blue-200 mb-12 text-lg font-light">Explore our curated menu or reserve a table at one of our stunning locations.</p>
               <div className="flex flex-col sm:flex-row justify-center gap-5">
-                <Link href="/#menu" className="bg-red-500 hover:bg-red-600 text-white font-bold px-10 py-4 rounded-full transition-all shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]">
+                <Link href="/menu" className="bg-red-500 hover:bg-red-600 text-white font-bold px-10 py-4 rounded-full transition-all shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)]">
                   Explore the Menu
                 </Link>
                 <Link href="/#restaurants" className="bg-blue-900/50 hover:bg-blue-800 text-white border border-blue-700 font-medium px-10 py-4 rounded-full transition-all backdrop-blur-sm">
@@ -236,5 +240,16 @@ function AboutContent() {
 
       </div>
     </div>
+  );
+}
+
+/* ══════════════════════════════════════════
+   ROOT EXPORT WITH CART PROVIDER
+══════════════════════════════════════════ */
+export default function About() {
+  return (
+    <CartProvider>
+      <AboutContent />
+    </CartProvider>
   );
 }

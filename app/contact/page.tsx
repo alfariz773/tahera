@@ -123,8 +123,8 @@ function ContactContent() {
         background: `radial-gradient(ellipse 50% 38% at 5% 52%, rgba(30, 58, 138, 0.05) 0%, transparent 58%)`
       }} />
 
-      <Navbar restaurants={restaurants} />
-      <CartDrawer />
+      <Navbar/>
+      
 
       <div className="relative z-10 pt-24 md:pt-32">
         

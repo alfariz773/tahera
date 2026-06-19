@@ -516,7 +516,9 @@ Savor the perfect blend of Pakistani, Indian, and Chinese cuisine. From hearty b
                     className="group cursor-pointer bg-white/80 backdrop-blur-sm rounded-xl overflow-hidden shadow-sm hover:shadow-xl border border-blue-100 flex flex-col hover:-translate-y-1 transition-all duration-300 h-full relative"
                   >
                     <div className="relative h-48 w-full overflow-hidden">
-                      <Image src={b.cover} alt={b.name} fill  className="object-cover group-hover:scale-105 transition-transform duration-700" />
+                      <Image src={b.cover} alt={b.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700" />
                       {b.openingSoon && (
                         <div className="absolute inset-0 bg-blue-950/40 backdrop-blur-[2px] flex items-center justify-center transition-opacity duration-300 group-hover:bg-blue-950/60">
                           <span className="bg-red-600 text-white text-xs font-bold tracking-widest uppercase px-4 py-2 rounded-md shadow-md transform -rotate-2">
