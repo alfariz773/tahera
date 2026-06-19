@@ -4,9 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
-import CartDrawer from '../components/CartDrawer';
-import { CartProvider } from '../context/CartContext'; 
-
 /* ─────────────────────────────────────────
    Scroll-reveal hook
 ───────────────────────────────────────── */
@@ -92,8 +89,8 @@ function AboutContent() {
         background: `radial-gradient(circle at 50% 0%, rgba(30, 58, 138, 0.4) 0%, transparent 80%)`
       }} />
 
-      <Navbar restaurants={[]} />
-      <CartDrawer />
+      <Navbar/>
+      
 
       <div className="relative z-10">
         
@@ -239,16 +236,5 @@ function AboutContent() {
 
       </div>
     </div>
-  );
-}
-
-/* ══════════════════════════════════════════
-   ROOT EXPORT WITH CART PROVIDER
-══════════════════════════════════════════ */
-export default function About() {
-  return (
-    <CartProvider>
-      <AboutContent />
-    </CartProvider>
   );
 }
